@@ -1,5 +1,4 @@
 #!/usr/bin/python
-from os import path
 
 import rospkg
 import rospy
@@ -16,6 +15,7 @@ def recognize():
     config.set_string('-hmm', rospy.get_param('~hmm'))
     config.set_string('-lm', rospy.get_param('~lm'))
     config.set_string('-dict', rospy.get_param('~dict'))
+    config.set_string('-fsg', rospy.get_param('~fsg'))
     config.set_string('-logfn', '/dev/null')
 
     publisher = rospy.Publisher('/recognizer/output', String, queue_size=10)

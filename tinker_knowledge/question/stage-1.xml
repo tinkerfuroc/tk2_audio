@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<qusetions name="stage-1">
+    <question>
+        <q>What is your name</q>
+        <a>My name is tinker</a>
+    </question>
+
+    <question>
+        <q>Where is capital of China?</q>
+        <a>Beijing</a>
+    </question>
+</qusetions>

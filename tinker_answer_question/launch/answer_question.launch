@@ -1,0 +1,12 @@
+<launch>
+    <node name="tinker_voice_recognize" pkg="tinker_voice_recognize" type="recognizer.py">
+        <param name="hmm" value="$(find tinker_knowledge)/model/en-us/en-us" type="string"/>
+        <param name="lm" value="$(find tinker_knowledge)/model/stage-1.lm" type="string"/>
+        <param name="dict" value="$(find tinker_knowledge)/model/stage-1.dic" type="string"/>
+        <param name="fsg" value="$(find tinker_knowledge)/model/stage-1.fsg" type="string"/>
+    </node>
+
+    <node name="answer_question" pkg="tinker_answer_question" type="answer_question.py" output="screen">
+        <param name="question_list" value="$(find tinker_knowledge)/question/stage-1.xml" type="string"/>
+    </node>
+</launch>
