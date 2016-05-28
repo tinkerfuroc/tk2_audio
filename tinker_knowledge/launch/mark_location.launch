@@ -1,0 +1,10 @@
+<launch>
+    <arg name="map_file" default="$(find tinker_2dnav)/map/1_3floor.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
+
+    <node name="rviz" pkg="rviz" type="rviz">
+        <remap from="/move_base_simple/goal" to="/mark_goal"/>
+    </node>
+
+    <node name="mark_location" pkg="tinker_knowledge" type="mark_location.py" output="screen"/>
+</launch>
