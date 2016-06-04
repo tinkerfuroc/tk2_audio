@@ -30,13 +30,14 @@ def rate_limited(maxPerSecond):
 
 
 class KaldiClient(WebSocketClient):
-    def __init__(self, url, protocols=None, extensions=None, heartbeat_freq=None, rate=16000):
+    def __init__(self, url, rate, protocols=None, extensions=None, heartbeat_freq=None):
         super(KaldiClient, self).__init__(url, protocols, extensions, heartbeat_freq)
         self.audio = pyaudio.PyAudio()
         self.audio_stream = self.audio.open(format=pyaudio.paInt16, 
                 channels=1, rate=rate, 
-                input=True, frames_per_buffer=rate / 2)
+                input=True, frames_per_buffer=rate/4)
         self.audio_stream.start_stream()
+        self.rate = rate
 
 
     @rate_limited(4)
@@ -47,13 +48,15 @@ class KaldiClient(WebSocketClient):
         print "Socket opened!"
         def send_data_to_ws():
             while True:
-                block = self.audio_stream.read(8000)
-                self.send_data(block)
+                try:
+                    block = self.audio_stream.read(self.rate / 4)
+                    self.send(block, binary=True)
+                except Exception as e:
+                    print e
             self.send("EOS")
 
         t = threading.Thread(target=send_data_to_ws)
         t.start()
-        t.join()
 
 
     def received_message(self, m):
@@ -65,7 +68,7 @@ class KaldiClient(WebSocketClient):
                 trans = response['result']['hypotheses'][0]['transcript']
                 print trans
                 if response['result']['final']:
-                    print trans
+                    print '[Final]: ' + trans
                     #print >> sys.stderr, trans,
                     print >> sys.stderr, '\r%s' % trans.replace("\n", "\\n")
         else:
@@ -74,13 +77,13 @@ class KaldiClient(WebSocketClient):
                 print >> sys.stderr, "Error message:",  response['message']
 
     def closed(self, code, reason=None):
-        pass
+        print 'closed!'
 
 
 def main():
-
-    uri = 'ws://localhost:8080/client/ws/speech?content-type='
+    uri = 'ws://localhost:8080/client/ws/speech?content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)16000,+format=(string)S16LE,+channels=(int)1'
     sample_rate = 16000
+    print uri
     ws = KaldiClient(uri, rate=sample_rate)
     ws.connect()
     while(True):
