@@ -40,7 +40,7 @@ class Pose(dexml.Model):
 
     @staticmethod
     def X(m):
-        return msg.Pose(postion=Point.X(m.position), orientation=Quaternion.X(m.orientation))
+        return msg.Pose(position=Point.X(m.position), orientation=Quaternion.X(m.orientation))
 
     @staticmethod
     def R(m):
