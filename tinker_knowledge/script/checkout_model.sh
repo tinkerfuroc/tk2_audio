@@ -1,3 +1,3 @@
 #! /bin/bash
 
-svn checkout https://github.com/cmusphinx/pocketsphinx/trunk/model ../model
+svn checkout svn://svn.code.sf.net/p/cmusphinx/code/trunk/pocketsphinx/model@r13098 ../model
