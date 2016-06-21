@@ -11,7 +11,6 @@ from tinker_audio_msgs.srv import *
 from termcolor import colored
 
 
-
 class Recognizer:
     def __init__(self):
         config = Decoder.default_config()
@@ -20,19 +19,19 @@ class Recognizer:
         config.set_string('-dict', rospy.get_param('~dict'))
         config.set_string('-fsg', rospy.get_param('~fsg'))
         config.set_string('-logfn', '/dev/null')
+        self.config = config
 
-    def change_mode(self, mode):
-
-
-    def worker(self, config):
+    def worker(self):
         publisher = rospy.Publisher('/recognizer/output', String, queue_size=10)
         p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
         stream.start_stream()
+        rospy.loginfo(colored('starting audio streaming ...', 'green'))
 
-        decoder = Decoder(config)
+        decoder = Decoder(self.config)
         decoder.start_utt()
         in_speech_bf = False
+        rospy.loginfo(colored('starting voice recognize ...', 'green'))
         while not rospy.is_shutdown():
             buf = stream.read(1024)
             if buf:
@@ -53,9 +52,8 @@ class Recognizer:
 
 def main():
     rospy.init_node('voice_recognize', anonymous=False)
-    rospy.loginfo(colored('starting voice recognize ...', 'green'))
-    service_change_mode = rospy.Service('change_voice_recognize', ChangeVoiceRecognizeMode,)
-    thread = Thread(target=recognize)
+    recognizer = Recognizer()
+    thread = Thread(target=recognizer.worker)
     thread.start()
     rospy.spin()
     thread.join()

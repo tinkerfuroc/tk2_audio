@@ -1,0 +1,6 @@
+<launch>
+    <node name="tinker_voice_recognize" pkg="tinker_voice_recognize" type="keywords_recognizer.py" output="screen">
+        <param name="hmm" value="$(find tinker_knowledge)/model/en-us/en-us" type="string"/>
+        <param name="dict" value="$(find tinker_knowledge)/model/en-us/cmudict-en-us.dict" type="string"/>
+    </node>
+</launch>
