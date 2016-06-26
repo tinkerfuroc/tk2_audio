@@ -9,6 +9,7 @@ from pocketsphinx.pocketsphinx import *
 from std_msgs.msg import String
 from tinker_audio_msgs.srv import *
 from termcolor import colored
+import socket
 
 
 class Recognizer:
@@ -20,20 +21,20 @@ class Recognizer:
         config.set_string('-fsg', rospy.get_param('~fsg'))
         config.set_string('-logfn', '/dev/null')
         self.config = config
+        audio_server = rospy.get_param('~audio_server', '192,168.2.3')
+        audio_port = rospy.get_param('~audio_port', 9012)
+        self.audio_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.audio_s.connect((audio_server, audio_port))
 
     def worker(self):
         publisher = rospy.Publisher('/recognizer/output', String, queue_size=10)
-        p = pyaudio.PyAudio()
-        stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
-        stream.start_stream()
         rospy.loginfo(colored('starting audio streaming ...', 'green'))
-
         decoder = Decoder(self.config)
         decoder.start_utt()
         in_speech_bf = False
         rospy.loginfo(colored('starting voice recognize ...', 'green'))
         while not rospy.is_shutdown():
-            buf = stream.read(1024)
+            buf = self.audio_s.recv(1024)
             if buf:
                 decoder.process_raw(buf, False, False)
                 if decoder.get_in_speech() != in_speech_bf:
@@ -47,7 +48,7 @@ class Recognizer:
             else:
                 break
         decoder.end_utt()
-        stream.stop_stream()
+        self.audio_s.close()
 
 
 def main():

@@ -15,9 +15,6 @@ from tinker_audio_msgs.msg import RecognizeKeywordsAction
 
 class RecognizeKeywordsActionServer:
     def __init__(self):
-        audio = pyaudio.PyAudio()
-        self.stream = audio.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
-
         self.server = actionlib.SimpleActionServer('keywords_recognize', RecognizeKeywordsAction, self.execute, auto_start=False)
         self.server.start()
 
@@ -30,7 +27,11 @@ class RecognizeKeywordsActionServer:
         config.set_float('-kws_threshold', 1e-4)
         config.set_string('-logfn', '/dev/null')
 
-        self.stream.start_stream()
+        audio_server = rospy.get_param('~audio_server', '192,168.2.3')
+        audio_port = rospy.get_param('~audio_port', 9012)
+        audio_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        audio_s.connect((audio_server, audio_port))
+
         rospy.loginfo(colored('starting audio streaming ...', 'green'))
         
         decoder = Decoder(config)
@@ -38,7 +39,7 @@ class RecognizeKeywordsActionServer:
         rospy.loginfo(colored('starting voice recognize ...', 'green'))
 
         while not rospy.is_shutdown():
-	    buf = self.stream.read(1024)
+	    buf = audio_s.recv(1024)
             if buf:
                 decoder.process_raw(buf, False, False)
             else:
@@ -51,7 +52,7 @@ class RecognizeKeywordsActionServer:
                 break
                 
         decoder.end_utt()
-        self.stream.stop_stream()
+        audio_s.close()
 
 
 def main():
