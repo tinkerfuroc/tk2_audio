@@ -10,7 +10,8 @@ from pocketsphinx.pocketsphinx import *
 from std_msgs.msg import String
 from termcolor import colored
 
-from tinker_audio_msgs.msg import RecognizeKeywordsAction
+from tinker_audio_msgs.msg import RecognizeKeywordsAction, RecognizeKeywordsActionGoal
+import socket
 
 
 class RecognizeKeywordsActionServer:
@@ -27,12 +28,12 @@ class RecognizeKeywordsActionServer:
         config.set_float('-kws_threshold', 1e-4)
         config.set_string('-logfn', '/dev/null')
 
-        audio_server = rospy.get_param('~audio_server', '192,168.2.3')
+        rospy.loginfo(colored('starting audio streaming ...', 'green'))
+        audio_server = rospy.get_param('~audio_server', 'laptop.furoc.net')
         audio_port = rospy.get_param('~audio_port', 9012)
         audio_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         audio_s.connect((audio_server, audio_port))
 
-        rospy.loginfo(colored('starting audio streaming ...', 'green'))
         
         decoder = Decoder(config)
         decoder.start_utt()

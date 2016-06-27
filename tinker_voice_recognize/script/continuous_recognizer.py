@@ -21,14 +21,14 @@ class Recognizer:
         config.set_string('-fsg', rospy.get_param('~fsg'))
         config.set_string('-logfn', '/dev/null')
         self.config = config
-        audio_server = rospy.get_param('~audio_server', '192,168.2.3')
+        rospy.loginfo(colored('starting audio streaming ...', 'green'))
+        audio_server = rospy.get_param('~audio_server', 'laptop.furoc.net')
         audio_port = rospy.get_param('~audio_port', 9012)
         self.audio_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.audio_s.connect((audio_server, audio_port))
 
     def worker(self):
         publisher = rospy.Publisher('/recognizer/output', String, queue_size=10)
-        rospy.loginfo(colored('starting audio streaming ...', 'green'))
         decoder = Decoder(self.config)
         decoder.start_utt()
         in_speech_bf = False

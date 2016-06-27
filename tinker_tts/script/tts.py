@@ -7,8 +7,8 @@ from std_msgs.msg import String
 
 
 def speak(text):
-    rospy.logdebug('speak %s', text)
-    subprocess.Popen(('espeak', "'{}'".format(text)))
+    rospy.logdebug('speak %s', text.data)
+    subprocess.Popen(('espeak', "'{}'".format(text.data)))
 
 def main():
     rospy.init_node('tinker_tts', anonymous=False)
