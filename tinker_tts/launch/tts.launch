@@ -1,0 +1,3 @@
+<launch>
+    <node name="tinker_tts" pkg="tinker_tts" type="tts.py"/>
+</launch>

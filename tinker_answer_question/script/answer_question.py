@@ -30,7 +30,7 @@ class Answerer:
         for question in self.question_dict:
             distance[question] = edit_distance(question, msg_question)
         question = min(distance, key=distance.get)
-        if distance[question] > 5:
+        if distance[question] > 10:
             return
         answer = self.question_dict[question]
         rospy.loginfo(colored('[A]%s', 'green'), answer)
@@ -39,6 +39,7 @@ class Answerer:
     @staticmethod
     def speak(answer):
         subprocess.Popen(('espeak', "'{}'".format(answer)))
+        rospy.sleep(5)
 
 
 def main():
