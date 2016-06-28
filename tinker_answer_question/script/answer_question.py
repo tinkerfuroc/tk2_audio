@@ -14,8 +14,8 @@ def build_word_keys(questions, prohibited_words):
     for question in questions.keys():
         for word in question.split():
             if word not in word_keys and word not in prohibited_words:
-                word_keys[word] = keys
-                keys += 1
+                word_keys[word] = key
+                key += 1
     return word_keys
 
 
@@ -26,9 +26,8 @@ def to_key_list(sentence, word_keys):
 class Answerer:
     def __init__(self, xml):
         self.question_dict = self.phrase_question(xml)
-        self.prohibited_words = {'where', 'are', 'what', 'of',
-                'or', 'is', 'in', 'which', 'who', 'the'}
-        self.word_keys = build_word_keys(questions, self.prohibited_words)
+        self.prohibited_words = {'where', 'are', 'what', 'of', 'or', 'is', 'in', 'which', 'who', 'the'}
+        self.word_keys = build_word_keys(self.question_dict, self.prohibited_words)
 
     @staticmethod
     def phrase_question(xml):
@@ -44,10 +43,15 @@ class Answerer:
             return
         rospy.loginfo(colored('[Q]%s', 'yellow'), msg_question)
         distance = {}
+        msg_keys = to_key_list(msg_question, self.word_keys)
+        if len(msg_keys) == 0:
+            return
         for question in self.question_dict:
-            distance[question] = edit_distance(to_key_list(question), to_key_list(msg_question))
+            distance[question] = edit_distance(to_key_list(question, self.word_keys), 
+                    to_key_list(msg_question, self.word_keys))
         question = min(distance, key=distance.get)
-        if distance[question] > 10:
+        question_keys = to_key_list(question, self.word_keys)
+        if float(distance[question]) / float(len(question_keys)) > 0.8:
             return
         answer = self.question_dict[question]
         rospy.loginfo(colored('[A]%s', 'green'), answer)
@@ -56,7 +60,7 @@ class Answerer:
     @staticmethod
     def speak(answer):
         subprocess.Popen(('espeak', "'{}'".format(answer)))
-        rospy.sleep(5)
+        rospy.sleep(len(answer) // 10)
 
 
 def main():

@@ -19,6 +19,7 @@ class Recognizer:
         config.set_string('-lm', rospy.get_param('~lm'))
         config.set_string('-dict', rospy.get_param('~dict'))
         config.set_string('-fsg', rospy.get_param('~fsg'))
+        config.set_float('-vad_threshold', 3.0)
         config.set_string('-logfn', '/dev/null')
         self.config = config
         rospy.loginfo(colored('starting audio streaming ...', 'green'))
