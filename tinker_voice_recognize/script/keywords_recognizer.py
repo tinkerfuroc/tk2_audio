@@ -25,7 +25,8 @@ class RecognizeKeywordsActionServer:
         config.set_string('-hmm', rospy.get_param('~hmm'))
         config.set_string('-dict', rospy.get_param('~dict'))
         config.set_string('-keyphrase', goal.keyword)
-        config.set_float('-kws_threshold', 1e-4)
+        config.set_float('-kws_threshold', 1e-20)
+        config.set_float('-vad_threshold', 2.5)
         config.set_string('-logfn', '/dev/null')
 
         rospy.loginfo(colored('starting audio streaming ...', 'green'))
@@ -40,7 +41,7 @@ class RecognizeKeywordsActionServer:
         rospy.loginfo(colored('starting voice recognize ...', 'green'))
 
         while not rospy.is_shutdown():
-	    buf = audio_s.recv(1024)
+            buf = audio_s.recv(1024)
             if buf:
                 decoder.process_raw(buf, False, False)
             else:
@@ -51,7 +52,8 @@ class RecognizeKeywordsActionServer:
                 rospy.loginfo(colored('keyword recognized', 'yellow'))
                 self.server.set_succeeded()
                 break
-                
+
+        rospy.loginfo(colored('stop recognize', 'yellow'))
         decoder.end_utt()
         audio_s.close()
 
