@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<PoseList name="RIPS">
+	<Pose name="waypoint1">
+		<Point x="10.4438047409" y="-4.2921128273" z="0.0"/>
+		<Quaternion w="0.56087151097" x="0.0" y="0.0" z="0.827902861562"/>
+	</Pose>
+	<Pose name="waypoint2">
+		<Point x="5.1286239624" y="0.836728572845" z="0.0"/>
+		<Quaternion w="-0.150182376233" x="0.0" y="0.0" z="0.988658309968"/>
+	</Pose>
+	<Pose name="waypoint3">
+		<Point x="1.48413181305" y="-0.265687465668" z="0.0"/>
+		<Quaternion w="-0.17780839734" x="0.0" y="0.0" z="0.984065126826"/>
+	</Pose>
+</PoseList>

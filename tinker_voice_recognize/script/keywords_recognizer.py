@@ -25,7 +25,7 @@ class RecognizeKeywordsActionServer:
         config.set_string('-hmm', rospy.get_param('~hmm'))
         config.set_string('-dict', rospy.get_param('~dict'))
         config.set_string('-keyphrase', goal.keyword)
-        config.set_float('-kws_threshold', 1e-20)
+        config.set_float('-kws_threshold', 1e-15)
         config.set_float('-vad_threshold', 2.5)
         config.set_string('-logfn', '/dev/null')
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<PoseList name="test_navi">
+	<Pose name="waypoint1">
+		<Point x="-4.05395364761" y="0.196955680847" z="0.0"/>
+		<Quaternion w="0.71689108436" x="0.0" y="0.0" z="-0.697185178532"/>
+	</Pose>
+	<Pose name="waypoint2">
+		<Point x="-4.38036441803" y="-0.0102926492691" z="0.0"/>
+		<Quaternion w="-0.00100354110435" x="0.0" y="0.0" z="0.999999496452"/>
+	</Pose>
+	<Pose name="waypoint3">
+		<Point x="-4.29026651382" y="0.180176377296" z="0.0"/>
+		<Quaternion w="0.710244621637" x="0.0" y="0.0" z="0.703954954124"/>
+	</Pose>
+	<Pose name="out">
+		<Point x="-1.39523744583" y="0.292117595673" z="0.0"/>
+		<Quaternion w="0.999662465427" x="0.0" y="0.0" z="-0.0259799002496"/>
+	</Pose>
+</PoseList>
