@@ -40,9 +40,10 @@ class Answerer:
         return questions
 
     def answer_question(self, msg_question):
-        if time.time() - self.last_time < 10:
+        if time.time() - self.last_time < 3:
             return
         msg_question = msg_question.data.lower()
+        print 'get' + msg_question
         if len(msg_question) == 0:
             return
         rospy.loginfo(colored('[Q]%s', 'yellow'), msg_question)
@@ -63,7 +64,7 @@ class Answerer:
 
     def speak(self, answer):
         subprocess.Popen(('espeak', "'{}'".format(answer)))
-        self.last_time = time.time()
+        self.last_time = time.time() + len(answer)//10
         rospy.sleep(len(answer) // 10)
 
 
@@ -72,6 +73,7 @@ def main():
     answerer = Answerer(rospy.get_param('~question_list'))
     rospy.loginfo(colored('starting answer question ...', 'green'))
     rospy.Subscriber('/recognizer/output', String, answerer.answer_question)
+    answerer.speak('I am tinker, I am ready for answer questions')
     rospy.spin()
 
 

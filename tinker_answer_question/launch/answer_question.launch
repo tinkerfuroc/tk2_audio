@@ -1,5 +1,7 @@
 <launch>
     <include file="$(find tinker_voice_recognize)/launch/continuous_recognize.launch"/>
+    <!--include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/-->
+    <node name="loc_sound" pkg="tinker_sound_localization" type="listen_and_move.py" />
 
     <node name="answer_question" pkg="tinker_answer_question" type="answer_question.py" output="screen">
         <param name="question_list" value="$(find tinker_knowledge)/question/stage-1.xml" type="string"/>

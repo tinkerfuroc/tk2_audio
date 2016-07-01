@@ -1,0 +1,8 @@
+<launch>
+    <node name="tinker_voice_recognize" pkg="tinker_voice_recognize" type="continuous_recognizer.py" output="screen">
+        <param name="hmm" value="$(find tinker_knowledge)/model/en-us/en-us" type="string"/>
+        <param name="lm" value="$(find tinker_knowledge)/model/keywords.lm" type="string"/>
+        <param name="dict" value="$(find tinker_knowledge)/model/keywords.dic" type="string"/>
+        <param name="fsg" value="$(find tinker_knowledge)/model/keywords.fsg" type="string"/>
+    </node>
+</launch>

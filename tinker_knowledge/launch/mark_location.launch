@@ -1,5 +1,5 @@
 <launch>
-    <arg name="map_file" default="$(find tinker_2dnav)/map/test_place.yaml"/>
+    <arg name="map_file" default="$(find tinker_2dnav)/map/area_a.yaml"/>
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
 
     <node name="rviz" pkg="rviz" type="rviz">

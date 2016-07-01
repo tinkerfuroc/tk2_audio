@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<PoseList name="arena_b">
+	<Pose name="waypoint2">
+		<Point x="7.15424203873" y="-2.56186485291" z="0.0"/>
+		<Quaternion w="-0.0700637848151" x="0.0" y="0.0" z="0.997542513409"/>
+	</Pose>
+	<Pose name="waypoint1">
+		<Point x="7.12477207184" y="0.382123947144" z="0.0"/>
+		<Quaternion w="0.870779873847" x="0.0" y="0.0" z="0.491673073601"/>
+	</Pose>
+	<Pose name="waypoint3">
+		<Point x="4.57506752014" y="-1.33180999756" z="0.0"/>
+		<Quaternion w="-0.0837182647862" x="0.0" y="0.0" z="0.99648946414"/>
+	</Pose>
+	<Pose name="out">
+		<Point x="1.32889080048" y="-0.415794849396" z="0.0"/>
+		<Quaternion w="-0.0800835749969" x="0.0" y="0.0" z="0.996788152526"/>
+	</Pose>
+</PoseList>

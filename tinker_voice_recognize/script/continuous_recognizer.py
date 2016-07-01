@@ -10,6 +10,7 @@ from std_msgs.msg import String
 from tinker_audio_msgs.srv import *
 from termcolor import colored
 import socket
+from audio_common_msgs.msg import AudioData
 
 
 class Recognizer:
@@ -29,6 +30,7 @@ class Recognizer:
         self.audio_s.connect((audio_server, audio_port))
 
     def worker(self):
+        audio_pub = rospy.Publisher('/audio', AudioData, queue_size=10)
         publisher = rospy.Publisher('/recognizer/output', String, queue_size=10)
         decoder = Decoder(self.config)
         decoder.start_utt()
@@ -38,11 +40,13 @@ class Recognizer:
             buf = self.audio_s.recv(1024)
             if buf:
                 decoder.process_raw(buf, False, False)
+                audio_pub.publish(AudioData(buf))
                 if decoder.get_in_speech() != in_speech_bf:
                     in_speech_bf = decoder.get_in_speech()
                     if not in_speech_bf:
                         decoder.end_utt()
                         result = decoder.hyp().hypstr
+                        print 'publishing ' + result
                         publisher.publish(result)
                         rospy.loginfo(colored('Result:', 'green') + '%s', result)
                         decoder.start_utt()
